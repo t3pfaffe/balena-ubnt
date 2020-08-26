@@ -1,0 +1,3 @@
+FROM nico640/docker-unms:1.2.6
+
+RUN chmod 0644 /etc/logrotate.d/unms
