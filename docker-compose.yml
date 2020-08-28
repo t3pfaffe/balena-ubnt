@@ -1,12 +1,23 @@
 version: '2.1'
 
 volumes:
-  unifi-data:
-  unms-data:
-
+  unms_data:
+  unifi_config:
+  unifi_log:
+  unifi_log2:
+  unifi_run:
+  unifi_run2:
+  unifi_work:
+  
+  
 services:
   unifi:
-    build: ./unifi
+    image: ryansch/unifi-rpi:latest
+    container_name: unifi
+    network_mode: host
+    restart: always
+    environment:
+      JAVA_OPTS: -Xmx512M
     ports:
       # See https://help.ubnt.com/hc/en-us/articles/218506997-UniFi-Ports-Used
       - "3478:3478/udp"
@@ -18,10 +29,14 @@ services:
       - "27117:27117"
       - "1900:1900/udp"
       - "10001:10001/udp"
-    # environment:
-    #   - JAVA_OPTS=${JAVA_OPTIONS}
     volumes:
-      - "unifi-data:/unifi"
+      # Unifi v5.0.7 creates all of these directories (some remain empty)
+      - unms_config:/var/lib/unifi
+      - unms_log:/usr/lib/unifi/logs
+      - unms_log2:/var/log/unifi
+      - unms_run:/usr/lib/unifi/run
+      - unms_run2:/run/unifi
+      - unms_work:/usr/lib/unifi/work
 
   unms:
     build: ./unms
@@ -35,4 +50,4 @@ services:
       - PUBLIC_HTTPS_PORT=4443
       - PUBLIC_WS_PORT=4443
     volumes:
-      - "unms-data:/config"
+      - unms_data:/config
