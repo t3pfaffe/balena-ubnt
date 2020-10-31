@@ -5,9 +5,6 @@
 This project unifies the `ubiquiti` software tools into a stand alone solution which provides many other nice features:
 1. Support for UNIFI controller
 2. Support for UNMS
-3. Support for updating dynamic IP using `dhclient` with cloudflare's DNS records
-4. Configurable domain that would result in serving `unms.{{DOMAIN}}` and `unifi.{{DOMAIN}}` using `nginx`
-5. `nginx` reverse proxy for serving `unms` and `unifi` with support for self-signed or `letsencrypt` certificates (using DNS-01 challenge)
 
 ## Components / services
 
@@ -18,34 +15,6 @@ Provides full support for [UNMS](https://unms.com/). It persists configuration i
 ### UniFi Controller
 
 Provides full support for [UniFi Controller](https://www.ubnt.com/download/unifi/) software. It persists configuration in a docker volume.
-
-### nginx
-
-This runs as a reverse proxy forwarding requests from `unifi.{{DOMAIN}}`/`unms.{{DOMAIN}}` to their respective container. Stores certificates as docker volumes for persistence and takes advantage of a set of variables to tweak its configuration and/or behaviour:
-
-```
-LETSENCRYPT - by default the container will generate self-signed vertificates and configure nginx to use them. Setting this variable to any value (for example 1) will change this behaviour and make the container generate letsencrypt certificates and configure nginx to use them.
-CLOUDFLARE_LOGIN - cloudflare username (required if using letsencrypt certificates as DNS-01 is used for challenge)
-CLOUDFLARE_APIKEY - cloudflare API key (required if using letsencrypt certificates as DNS-01 is used for challenge)
-DOMAIN - domain (required)
-
-```
-
-### ddclient
-
-The purpose of this container is to update the DNS records in cloudflare with the current public IP. It uses a ddclient fork available [here](https://github.com/ddclient/ddclient) which includes the needed support for cloudflare.
-
-For ease of use, this container takes advantage of a set of variables to configure ddclient before running the service:
-
-```
-CLOUDFLARE_LOGIN - cloudflare username (required)
-CLOUDFLARE_APIKEY - cloudflare API key (required)
-DOMAIN - domain (required)
-DDCLIENT_UPDATE_SECONDS - how often to check for IP updates (default to 300)
-DDCLIENT_EXTRAARGS - additional arguments to run ddclient with (optional)
-```
-
-Configuring `DOMAIN` will instruct the service to update `unms.{{DOMAIN}}` and `unifi.{DOMAIN}}` using the current public IP.
 
 ###
 
