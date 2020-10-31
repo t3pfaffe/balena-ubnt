@@ -21,6 +21,7 @@ Provides full support for [UniFi Controller](https://www.ubnt.com/download/unifi
 ## License
 
 Copyright 2020 Tom Pfaffe
+
 Copyright 2018 Resinio Ltd.
 
 
